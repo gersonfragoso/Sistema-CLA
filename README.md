@@ -44,3 +44,27 @@ Ate o momento do projeto criamos apenas a base. Então as funcionalidades que es
 - **Maven**: 3.6 ou superior
 - **IDE**: IntelliJ IDEA, Eclipse ou outra compatível com Java
 - **H2**: Já incluído como dependência no projeto (não requer instalação separada)
+
+### Json para teste de cadastro
+
+- **Post**/usuarios 
+```json
+{
+  "nome": "teste32",
+  "sobrenome": "Silva",
+  "cpf": "123.456.756-10",
+  "dataNascimento": "1990-05-15",
+  "endereco": {
+    "rua": "Rua das Flores",
+    "cidade": "São Paulo",
+    "estado": "SP",
+    "cep": "01234-567",
+    "numeroCasa": "123"
+  },
+  "telefone": {
+    "ddd": "11",
+    "numeroTelefone": "9276155321"
+  },
+  "bloqueado": false
+}
+```
