@@ -5,6 +5,7 @@ import com.example.sistema_cla.domain.model.Usuario;
 import com.example.sistema_cla.domain.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -15,6 +16,9 @@ public class UsuarioService {
 
     public UsuarioService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
+    }
+    public List<Usuario> listarAll(){
+        return usuarioRepository.findAll();
     }
 
     public Usuario criarUsuario(Usuario usuario) {

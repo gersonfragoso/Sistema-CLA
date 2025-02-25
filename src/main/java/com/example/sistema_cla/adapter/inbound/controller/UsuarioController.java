@@ -6,6 +6,7 @@ import com.example.sistema_cla.application.service.UsuarioService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -30,10 +31,19 @@ public class UsuarioController {
         return usuario.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+    @GetMapping("/listar")
+    public ResponseEntity<List<Usuario>> buscarTodos() {
+        List<Usuario> usuarios = usuarioService.listarAll();
+        if (usuarios.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(usuarios);
+    }
 
     @PutMapping("/{id}/bloquear")
     public ResponseEntity<Void> bloquearUsuario(@PathVariable Long id, @RequestParam boolean bloquear) {
         usuarioService.bloquearUsuario(id, bloquear);
         return ResponseEntity.noContent().build();
     }
+
 }

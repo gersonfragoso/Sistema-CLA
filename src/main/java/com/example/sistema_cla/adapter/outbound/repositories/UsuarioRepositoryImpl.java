@@ -9,7 +9,9 @@ import com.example.sistema_cla.domain.model.Usuario;
 import com.example.sistema_cla.domain.repository.UsuarioRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public class UsuarioRepositoryImpl implements UsuarioRepository {
@@ -92,5 +94,32 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
                         entity.isBloqueado()
                 )
         );
+    }
+
+    @Override
+    public List<Usuario> findAll() {
+        return jpaUsuarioRepository.findAll().stream()
+                .map(entity -> new Usuario(
+                        entity.getId(),
+                        entity.getNome(),
+                        entity.getSobrenome(),
+                        entity.getCpf(),
+                        entity.getDataNascimento(),
+                        new Endereco(
+                                entity.getId(),
+                                entity.getEndereco().getRua(),
+                                entity.getEndereco().getCidade(),
+                                entity.getEndereco().getEstado(),
+                                entity.getEndereco().getCep(),
+                                entity.getEndereco().getNumeroCasa()
+                        ),
+                        new Telefone(
+                                entity.getId(),
+                                entity.getTelefone().getDdd(),
+                                entity.getTelefone().getNumeroTelefone()
+                        ),
+                        entity.isBloqueado()
+                ))
+                .collect(Collectors.toList());
     }
 }
