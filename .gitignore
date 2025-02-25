@@ -31,3 +31,25 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Arquivos de configuração ###
+*.properties
+*.yml
+*.yaml
+*.env
+*.config
+application*.properties
+application*.yml
+
+### Logs ###
+logs/
+*.log
+
+### Dependências ###
+/.mvn/
+/.gradle/
+/node_modules/
+
+### Outros arquivos ###
+.DS_Store
+Thumbs.db
