@@ -3,6 +3,7 @@ package com.example.sistema_cla.adapter.inbound.controller;
 
 import com.example.sistema_cla.domain.model.Usuario;
 import com.example.sistema_cla.application.service.UsuarioService;
+import com.example.sistema_cla.infrastructure.exceptions.DuplicateUserException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +22,12 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) {
-        Usuario usuarioSalvo = usuarioService.criarUsuario(usuario);
-        return ResponseEntity.ok(usuarioSalvo);
+        try {
+            Usuario novoUsuario = usuarioService.criarUsuario(usuario);
+            return ResponseEntity.ok(novoUsuario);
+        } catch (DuplicateUserException e) {
+            return ResponseEntity.badRequest().body(null); // Ou uma mensagem customizada
+        }
     }
 
     @GetMapping("/{id}")
