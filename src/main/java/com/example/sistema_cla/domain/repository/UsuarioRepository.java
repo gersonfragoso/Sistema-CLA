@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface UsuarioRepository {
     Usuario save(Usuario usuario);
 
-    void bloquearUsuario(Long id, boolean bloquear);
+    void bloquearUsuario(Long id);
 
     Optional<Usuario> findById(Long id);
 

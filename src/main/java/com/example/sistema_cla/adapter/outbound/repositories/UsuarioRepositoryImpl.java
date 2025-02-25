@@ -28,10 +28,10 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
     }
 
     @Override
-    public void bloquearUsuario(Long id, boolean bloquear) {
+    public void bloquearUsuario(Long id) {
         jpaUsuarioRepository.findById(id)
                 .ifPresent(usuario -> {
-                    usuario.setBloqueado(bloquear);
+                    usuario.setBloqueado(true);
                     jpaUsuarioRepository.save(usuario);
                 });
     }

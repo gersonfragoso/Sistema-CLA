@@ -46,8 +46,8 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}/bloquear")
-    public ResponseEntity<Void> bloquearUsuario(@PathVariable Long id, @RequestParam boolean bloquear) {
-        usuarioService.bloquearUsuario(id, bloquear);
+    public ResponseEntity<Void> bloquearUsuario(@PathVariable Long id) {
+        usuarioService.bloquearUsuario(id);
         return ResponseEntity.noContent().build();
     }
 

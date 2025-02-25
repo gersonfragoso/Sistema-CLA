@@ -51,7 +51,7 @@ public class UsuarioService {
         return usuarioRepository.findById(id);
     }
 
-    public void bloquearUsuario(Long id, boolean bloquear) {
-        usuarioRepository.bloquearUsuario(id, bloquear);
+    public void bloquearUsuario(Long id) {
+        usuarioRepository.bloquearUsuario(id);
     }
 }
