@@ -22,27 +22,6 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
 
     @Override
     public Usuario save(Usuario usuario) {
-
-        // Validar o cpf
-        String cpfNumerico = usuario.getCpf().replaceAll("[^0-9]", ""); // Remove tudo que não é número
-        if (cpfNumerico.length() != 11) {
-            throw new IllegalArgumentException("O CPF deve ter exatamente 11 dígitos. CPF fornecido: " + usuario.getCpf());
-        }
-        // Verificar duplicidade de CPF
-        Optional<JpaUsuarioEntity> existingByCpf = jpaUsuarioRepository.findByCpf(usuario.getCpf());
-        if (existingByCpf.isPresent() && !existingByCpf.get().getId().equals(usuario.getId())) {
-            throw new DuplicateUserException("Já existe um usuário com o CPF: " + usuario.getCpf());
-        }
-
-        // Verificar duplicidade de telefone
-        Optional<JpaUsuarioEntity> existingByTelefone = jpaUsuarioRepository.findByTelefoneDddAndNumero(
-                String.valueOf(usuario.getTelefone().getDdd()),
-                usuario.getTelefone().getNumeroTelefone()
-        );
-        if (existingByTelefone.isPresent() && !existingByTelefone.get().getId().equals(usuario.getId())) {
-            throw new DuplicateUserException("Já existe um usuário com o telefone: " +
-                    usuario.getTelefone().getDdd() + " " + usuario.getTelefone().getNumeroTelefone());
-        }
         return UsuarioMapper.toDomainModel(
                 jpaUsuarioRepository.save(UsuarioMapper.toJpaEntity(usuario))
         );
@@ -68,5 +47,15 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
         return jpaUsuarioRepository.findAll().stream()
                 .map(UsuarioMapper::toDomainModel)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<Usuario> findByCpf(String cpf) {
+        return jpaUsuarioRepository.findByCpf(cpf).map(UsuarioMapper::toDomainModel);
+    }
+
+    @Override
+    public Optional<JpaUsuarioEntity> findByTelefoneDddAndNumero(String ddd, String numeroTelefone) {
+        return jpaUsuarioRepository.findByTelefoneDddAndNumero(ddd,numeroTelefone);
     }
 }

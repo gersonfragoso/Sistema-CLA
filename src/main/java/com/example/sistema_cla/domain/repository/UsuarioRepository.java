@@ -1,5 +1,6 @@
 package com.example.sistema_cla.domain.repository;
 
+import com.example.sistema_cla.adapter.outbound.entities.JpaUsuarioEntity;
 import com.example.sistema_cla.domain.model.Usuario;
 
 import java.util.List;
@@ -13,4 +14,10 @@ public interface UsuarioRepository {
     Optional<Usuario> findById(Long id);
 
     List<Usuario> findAll();
+
+    Optional<Usuario> findByCpf(String cpf);
+
+    Optional<JpaUsuarioEntity> findByTelefoneDddAndNumero(String ddd, String numeroTelefone);
+
+
 }
