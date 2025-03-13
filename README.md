@@ -1,70 +1,148 @@
-# Sistema CLA 
+# 📌 Sistema CLA - Compartilhamento de Locais com Acessibilidade
 
-## Descrição
-O Sistema CLA tem como objetivo facilitar o compartilhamento de informações sobre locais acessíveis, ajudando pessoas com deficiência ou mobilidade reduzida a encontrar espaços que atendam às suas necessidades. A plataforma permitirá que usuários cadastrem, avaliem e consultem locais acessíveis, promovendo maior inclusão e acessibilidade urbana.
+O **Sistema CLA** é uma plataforma colaborativa que permite que usuários cadastrem, avaliem e consultem locais acessíveis para pessoas com deficiência ou mobilidade reduzida.
 
-## Diagramas 
-### Diagrama de Classes: (Aqui vai o diagrama de classe)
+## 📖 Funcionalidades
+- 📌 **Cadastro e Login de Usuários**
+- 🏢 **Cadastro de Locais Acessíveis**
+- ⭐ **Avaliação de Locais**
+- 🔍 **Pesquisa e Filtros de Locais** ( ainda não disponivel)
+- 🔧 **Administração de Critérios de Acessibilidade** ( ainda não disponivel)
 
-## Tecnologias Utilizadas
-- **Linguagem**: Java
-- **Framework**: Spring Boot
-- **Persistência**: H2 (banco de dados em memória)
-- **Arquitetura**: Hexagonal (Ports and Adapters)
-- **Dependências**: Spring Data JPA, Lombok (opcional), Jakarta Persistence
+---
 
-## Estrutura do Projeto
-O projeto segue a arquitetura hexagonal, dividindo-se em camadas para separar a lógica do domínio, os adaptadores (entrada e saída) e a infraestrutura. Abaixo está a estrutura de pacotes observada:
+## 🚀 Tecnologias Utilizadas
+- **Linguagem:** Java 21 ☕
+- **Framework:** Spring Boot 🌱
+- **Banco de Dados:** PostgreSQL 🐘
+- **Persistência:** JPA/Hibernate 📄
+- **Gerenciamento de Dependências:** Maven 🛠️
+- **Segurança:** Spring Security 🔒 (Futuro)
 
-### 1. `adapter`
-- **Inbound (entrada)**: Camada responsável por receber requisições externas, como APIs REST via `UsuarioController`.
-- **Outbound (saída)**: Camada responsável por implementar a interação com recursos externos, como o banco de dados H2.
-	 - * Entities : Estão as classes responsaveis por criar as entidades no banco.
-	 - * Repositories: Aqui esta a interface JPA que vai ser pela a persistencia dos dados no banco.
+## 🛠️ Instalação e Configuração
 
-### 2. `application`
-- **Service**: Contém a lógica de negócios, implementada em `UsuarioService`, que atua como o "core" do domínio, interagindo com os ports.
+### 🔧 **Pré-requisitos**
+1. **Java 21** instalado ([Download](https://jdk.java.net/21/))
+2. **PostgreSQL** instalado e rodando (Observação nesse momento estamos utilizando apenas o h2 pois o projeto esta em desenvolvimento)
+3. **Maven** instalado
 
-### 3. `domain`
-- **Model**: Define os modelos de domínio puro (`Usuario`, `Endereco`, `Telefone`), livres de dependências externas.
-- **Repository**: Define o port `UsuarioRepository`, uma interface que expõe as operações de CRUD para o domínio, sem detalhes de implementação.
-
-### 4. `infrastructure`
-- **Exceptions**: Contém exceções personalizadas, como `DuplicateUserException`, para tratamento de erros específicos.
-- **Utils**: Inclui utilitários, como `UsuarioMapper`, para mapeamento entre entidades e modelos de domínio.
-
-## Funcionalidades
-Ate o momento do projeto criamos apenas a base. Então as funcionalidades que estão aqui são as que foram pedidas para a entrega da tarefa atual.
-- **Criação de Usuários**: Permite registrar novos usuários com informações como CPF, nome, telefone, endereço e status de bloqueio.
-- **Busca de Usuários**: Recupera informações de um usuário por ID ou lista todos os usuários.
-- **Bloqueio/Desbloqueio de Usuários**: Altera o status de bloqueio de um usuário.
-
-## Pré-requisitos
-- **JDK**: 17 ou superior
-- **Maven**: 3.6 ou superior
-- **IDE**: IntelliJ IDEA, Eclipse ou outra compatível com Java
-- **H2**: Já incluído como dependência no projeto (não requer instalação separada)
-
-### Json para teste de cadastro
+### Json para teste
 
 - **Post**/usuarios 
+- Observação: Nesse primeiro momentos as informações de endereço e telefone podem estar nulas.
 ```json
 {
-  "nome": "teste32",
-  "sobrenome": "Silva",
-  "cpf": "123.456.756-10",
-  "dataNascimento": "1990-05-15",
-  "endereco": {
-    "rua": "Rua das Flores",
-    "cidade": "São Paulo",
-    "estado": "SP",
-    "cep": "01234-567",
-    "numeroCasa": "123"
-  },
-  "telefone": {
-    "ddd": "11",
-    "numeroTelefone": "9276155321"
-  },
-  "bloqueado": false
+	"nome": "João",
+	"sobrenome": "Silva",
+	"cpf": "123.456.789-00",
+	"email": "joao.silva@example.com",
+	"senha": "senha123",
+	"dataNascimento": "1990-05-10"
 }
 ```
+
+- **Post**/locais 
+- statusAcessibilidade é um enum que possue ate o momento as seguintes opções: `ACESSIVEL`, `PARCIALMENTE_ACESSIVEL`, `INACESSIVEL`
+```json
+{
+	"nome": "Restaurante Acessível",
+	"endereco": "Rua das Flores, 123",
+	"tipoLocal": "Restaurante",
+	"statusAcessibilidade": "ACESSIVEL"
+}
+```
+
+- **Post**/avaliar
+```json
+{
+	"usuarioId": 1,
+	"localId": 1,
+	"nota": 5,
+	"comentario": "Ótimo local, muito acessível!"
+}
+```
+
+# 📋 Casos de Uso
+
+## [UC01] Cadastrar Usuário
+
+- **Descrição**: Este caso de uso é responsável pelo cadastro das informações do usuário no sistema.
+- **Ator**: Usuário
+- **Pré-condições**: O usuário deve fornecer informações válidas.
+- **Pós-condições**: Os dados do usuário devem estar armazenados no sistema.
+
+### Fluxo Principal [FP]
+1. Este caso de uso se inicia quando o usuário seleciona a opção “Cadastro” na interface do sistema.
+2. O sistema disponibiliza um formulário que contém campos para os dados do usuário (Nome, sobrenome, CPF, e-mail, data de nascimento, endereço e telefone).
+3. O usuário informa os dados no formulário.
+4. O sistema valida os dados informados [FS01].
+5. O sistema armazena os dados informados e envia a mensagem “Dados do usuário inseridos com sucesso”.
+
+### Fluxo Secundário [FS01]
+1. Caso o usuário forneça algum dado incorreto, o sistema invalida o dado informado.
+2. O sistema executa novamente o passo 2 do [FP], disponibilizando apenas os campos de dados informados incorretamente.
+
+---
+
+## [UC02] Efetuar Login
+
+- **Descrição**: Este caso de uso é responsável por efetuar o login do usuário no sistema.
+- **Ator**: Usuário
+- **Pré-condições**: O usuário deve possuir login e senha válidos.
+- **Pós-condições**: O usuário deve estar logado no sistema.
+
+### Fluxo Principal [FP]
+1. Este caso de uso se inicia quando o usuário deseja efetuar login no sistema.
+2. O sistema disponibiliza um formulário que contém campos para os dados do usuário: “login” e “senha”.
+3. O usuário informa os dados solicitados no formulário.
+4. O sistema valida os dados informados [FS01].
+5. O sistema libera o acesso às funcionalidades de acordo com o perfil do usuário.
+
+### Fluxo Secundário [FS01]
+1. Caso o usuário forneça algum dado incorreto, o sistema envia a mensagem “Login ou senha incorretos”.
+2. O sistema executa novamente o passo 2 do [FP].
+
+---
+
+## [UC03] Avaliar Local
+
+- **Descrição**: Este caso de uso é responsável pelo cadastro das avaliações do usuário no sistema.
+- **Ator**: Usuário
+- **Pré-condições**: O usuário deve estar logado no sistema.
+- **Pós-condições**: As avaliações do usuário devem estar armazenadas no sistema.
+
+### Fluxo Principal [FP]
+1. O caso de uso se inicia quando o usuário deseja avaliar um local.
+2. O sistema exibe um formulário contendo os seguintes campos: Título, Nota e Comentários.
+3. O usuário preenche o formulário com as informações solicitadas.
+4. O sistema valida os dados informados ([FS01]).
+5. Se os dados forem válidos, o sistema registra a avaliação e exibe uma confirmação ao usuário.
+6. O caso de uso é encerrado.
+
+### Fluxo Secundário [FS01]
+1. Caso o usuário forneça um local não cadastrado, o sistema envia a seguinte mensagem “Local inválido”.
+2. O sistema executa novamente o passo 2 do [FP].
+
+
+# 📋 Casos de Uso do Usuario
+
+![Image](https://github.com/user-attachments/assets/e6ddacc0-45f0-4de3-a2fe-b75a3ba8f89d)
+- Observação ainda faltar fazer o caso de uso do Usuario do tipo admin (`MODERADOR`) e do vistante (`VISITANTE`)
+
+
+# 📋 Diagrama de classes
+
+![Image](https://github.com/user-attachments/assets/86445c92-f54e-4c28-bd77-b61fd095dec5)
+
+## 🏗️ Melhorias Futuras
+
+- 🔐 **Autenticação e Autorização** (Spring Security + JWT)
+- 🌎 **Integração com Google Maps API**
+- 📊 **Relatórios administrativos** para moderadores
+- 📱 **Interface Web** para facilitar a usabilidade
+- ### 🛠️ Funções de Admin
+
+- **Gerenciar usuários**: Criar, editar e excluir contas de usuários
+- **Gerenciar locais acessíveis**: Adicionar, editar e remover locais
+- **Visualizar relatórios**: Acessar relatórios detalhados sobre o uso do sistema
+- **Moderadores**: Criar regras para o cadastro de locais de acessibilidade
