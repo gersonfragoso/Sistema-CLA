@@ -78,7 +78,7 @@ O **Sistema CLA** é uma plataforma colaborativa que permite que usuários cadas
 4. O sistema valida os dados informados [FS01].
 5. O sistema armazena os dados informados e envia a mensagem “Dados do usuário inseridos com sucesso”.
 
-### Fluxo Secundário [FS01]
+### Fluxo Secundário de Exceção [FS01]
 1. Caso o usuário forneça algum dado incorreto, o sistema invalida o dado informado.
 2. O sistema executa novamente o passo 2 do [FP], disponibilizando apenas os campos de dados informados incorretamente.
 
@@ -98,7 +98,7 @@ O **Sistema CLA** é uma plataforma colaborativa que permite que usuários cadas
 4. O sistema valida os dados informados [FS01].
 5. O sistema libera o acesso às funcionalidades de acordo com o perfil do usuário.
 
-### Fluxo Secundário [FS01]
+### Fluxo Secundário de Exceção[FS01]
 1. Caso o usuário forneça algum dado incorreto, o sistema envia a mensagem “Login ou senha incorretos”.
 2. O sistema executa novamente o passo 2 do [FP].
 
@@ -119,7 +119,7 @@ O **Sistema CLA** é uma plataforma colaborativa que permite que usuários cadas
 5. Se os dados forem válidos, o sistema registra a avaliação e exibe uma confirmação ao usuário.
 6. O caso de uso é encerrado.
 
-### Fluxo Secundário [FS01]
+### Fluxo Secundário de Exceção[FS01]
 1. Caso o usuário forneça um local não cadastrado, o sistema envia a seguinte mensagem “Local inválido”.
 2. O sistema executa novamente o passo 2 do [FP].
 
