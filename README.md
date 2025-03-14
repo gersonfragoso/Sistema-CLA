@@ -65,51 +65,48 @@ O **Sistema CLA** é uma plataforma colaborativa que permite que usuários cadas
 # 📋 Casos de Uso
 
 ## [UC01] Cadastrar Usuário
-
-- **Descrição**: Este caso de uso é responsável pelo cadastro das informações do usuário no sistema.
-- **Ator**: Usuário
-- **Pré-condições**: O usuário deve fornecer informações válidas.
-- **Pós-condições**: Os dados do usuário devem estar armazenados no sistema.
+**Descrição:** Este caso de uso é responsável pelo cadastro das informações do usuário no sistema.  
+**Ator:** Usuário  
+**Pré-condições:** O usuário deve fornecer informações válidas.  
+**Pós-condições:** Os dados do usuário devem estar armazenados no sistema.  
 
 ### Fluxo Principal [FP]
 1. Este caso de uso se inicia quando o usuário seleciona a opção “Cadastro” na interface do sistema.
 2. O sistema disponibiliza um formulário que contém campos para os dados do usuário (Nome, sobrenome, CPF, e-mail, data de nascimento, endereço e telefone).
 3. O usuário informa os dados no formulário.
-4. O sistema valida os dados informados [FS01].
+4. O sistema valida os dados informados ([FS01]).
 5. O sistema armazena os dados informados e envia a mensagem “Dados do usuário inseridos com sucesso”.
 
-### Fluxo Secundário [FS01]
+### Fluxo Secundário de Exceção [FS01]
 1. Caso o usuário forneça algum dado incorreto, o sistema invalida o dado informado.
 2. O sistema executa novamente o passo 2 do [FP], disponibilizando apenas os campos de dados informados incorretamente.
 
 ---
 
 ## [UC02] Efetuar Login
-
-- **Descrição**: Este caso de uso é responsável por efetuar o login do usuário no sistema.
-- **Ator**: Usuário
-- **Pré-condições**: O usuário deve possuir login e senha válidos.
-- **Pós-condições**: O usuário deve estar logado no sistema.
+**Descrição:** Este caso de uso é responsável por efetuar o login do usuário no sistema.  
+**Ator:** Usuário  
+**Pré-condições:** O usuário deve possuir login e senha válidos.  
+**Pós-condições:** O usuário deve estar logado no sistema.  
 
 ### Fluxo Principal [FP]
 1. Este caso de uso se inicia quando o usuário deseja efetuar login no sistema.
 2. O sistema disponibiliza um formulário que contém campos para os dados do usuário: “login” e “senha”.
 3. O usuário informa os dados solicitados no formulário.
-4. O sistema valida os dados informados [FS01].
+4. O sistema valida os dados informados ([FS01]).
 5. O sistema libera o acesso às funcionalidades de acordo com o perfil do usuário.
 
-### Fluxo Secundário [FS01]
+### Fluxo Secundário de Exceção [FS01]
 1. Caso o usuário forneça algum dado incorreto, o sistema envia a mensagem “Login ou senha incorretos”.
 2. O sistema executa novamente o passo 2 do [FP].
 
 ---
 
 ## [UC03] Avaliar Local
-
-- **Descrição**: Este caso de uso é responsável pelo cadastro das avaliações do usuário no sistema.
-- **Ator**: Usuário
-- **Pré-condições**: O usuário deve estar logado no sistema.
-- **Pós-condições**: As avaliações do usuário devem estar armazenadas no sistema.
+**Descrição:** Este caso de uso é responsável pelo cadastro das avaliações do usuário no sistema.  
+**Ator:** Usuário  
+**Pré-condições:** O usuário deve estar logado no sistema.  
+**Pós-condições:** As avaliações do usuário devem estar armazenadas no sistema.  
 
 ### Fluxo Principal [FP]
 1. O caso de uso se inicia quando o usuário deseja avaliar um local.
@@ -119,14 +116,14 @@ O **Sistema CLA** é uma plataforma colaborativa que permite que usuários cadas
 5. Se os dados forem válidos, o sistema registra a avaliação e exibe uma confirmação ao usuário.
 6. O caso de uso é encerrado.
 
-### Fluxo Secundário [FS01]
+### Fluxo Secundário de Exceção [FS01]
 1. Caso o usuário forneça um local não cadastrado, o sistema envia a seguinte mensagem “Local inválido”.
 2. O sistema executa novamente o passo 2 do [FP].
 
-
 # 📋 Casos de Uso do Usuario
 
-![Image](https://github.com/user-attachments/assets/e6ddacc0-45f0-4de3-a2fe-b75a3ba8f89d)
+![Image](https://github.com/user-attachments/assets/b7814809-31ad-45a1-a681-315396f2e601)
+
 - Observação ainda faltar fazer o caso de uso do Usuario do tipo admin (`MODERADOR`) e do vistante (`VISITANTE`)
 
 
