@@ -1,6 +1,5 @@
 HELP.md
 target/
-!.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
@@ -47,8 +46,18 @@ logs/
 
 ### Dependências ###
 /.mvn/
-/.gradle/
+mvnw
+mvnw.cmd
+/gradle/
 /node_modules/
+
+### Builds ###
+target/
+out/
+
+### Caches Temporários ###
+.cache/
+.temp/
 
 ### Outros arquivos ###
 .DS_Store
