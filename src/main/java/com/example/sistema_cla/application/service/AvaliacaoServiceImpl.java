@@ -15,13 +15,13 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 
 @Service
-public class AvaliacaoService {
+public class AvaliacaoServiceImpl {
     private final AvaliacaoRepository avaliacaoRepository;
     private final UsuarioRepository usuarioRepository;
     private final LocalRepository localRepository;
 
-    public AvaliacaoService(AvaliacaoRepository avaliacaoRepository,
-                            UsuarioRepository usuarioRepository, LocalRepository localRepository) {
+    public AvaliacaoServiceImpl(AvaliacaoRepository avaliacaoRepository,
+                                UsuarioRepository usuarioRepository, LocalRepository localRepository) {
         this.avaliacaoRepository = avaliacaoRepository;
         this.usuarioRepository = usuarioRepository;
         this.localRepository = localRepository;
