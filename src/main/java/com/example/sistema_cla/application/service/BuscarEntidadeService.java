@@ -2,7 +2,7 @@ package com.example.sistema_cla.application.service;
 
 import com.example.sistema_cla.domain.model.Local;
 import com.example.sistema_cla.domain.model.Usuario;
-import com.example.sistema_cla.domain.repository.EntidadeNaoEncontradaException;
+import com.example.sistema_cla.infrastructure.exceptions.EntidadeNaoEncontradaException;
 import com.example.sistema_cla.domain.repository.LocalRepository;
 import com.example.sistema_cla.domain.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;

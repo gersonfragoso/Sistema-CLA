@@ -1,7 +1,5 @@
 package com.example.sistema_cla.application.service;
 
-import com.example.sistema_cla.domain.enums.StatusAcessibilidade;
-import com.example.sistema_cla.infrastructure.exceptions.InvalidStatusAcessibilidadeException;
 import com.example.sistema_cla.infrastructure.utils.LocalMapper;
 import com.example.sistema_cla.presentation.dto.request.LocalRequest;
 import com.example.sistema_cla.presentation.dto.response.LocalResponse;

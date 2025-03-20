@@ -1,6 +1,6 @@
 package com.example.sistema_cla.presentation.controller;
 
-import com.example.sistema_cla.application.service.AvaliacaoServiceImpl;
+import com.example.sistema_cla.application.service.AvaliacaoService;
 import com.example.sistema_cla.presentation.dto.request.AvaliacaoRequest;
 import com.example.sistema_cla.presentation.dto.response.AvaliacaoResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/avaliar")
 public class AvaliacaoController {
 
-    private final AvaliacaoServiceImpl avaliacaoService;
+    private final AvaliacaoService avaliacaoService;
 
-    public AvaliacaoController(AvaliacaoServiceImpl avaliacaoService) {
+    public AvaliacaoController(AvaliacaoService avaliacaoService) {
         this.avaliacaoService = avaliacaoService;
     }
 

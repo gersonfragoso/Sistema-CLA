@@ -1,4 +1,4 @@
-package com.example.sistema_cla.domain.repository;
+package com.example.sistema_cla.infrastructure.exceptions;
 
 public class EntidadeNaoEncontradaException extends RuntimeException {
     public EntidadeNaoEncontradaException(String entidade, Long id) {

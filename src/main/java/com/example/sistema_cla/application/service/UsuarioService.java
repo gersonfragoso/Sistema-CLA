@@ -1,15 +1,12 @@
 package com.example.sistema_cla.application.service;
 
-import com.example.sistema_cla.infrastructure.exceptions.UsuarioNotFoundException;
 import com.example.sistema_cla.infrastructure.utils.UsuarioMapper;
 import com.example.sistema_cla.presentation.dto.request.UsuarioRequest;
 import com.example.sistema_cla.presentation.dto.response.UsuarioResponse;
-import com.example.sistema_cla.domain.enums.TipoUsuario;
 import com.example.sistema_cla.domain.model.Usuario;
 import com.example.sistema_cla.domain.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
