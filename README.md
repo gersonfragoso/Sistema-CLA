@@ -129,11 +129,34 @@ O **Sistema CLA** é uma plataforma colaborativa que permite que usuários cadas
 
 # 📋 Diagrama de classes
 
+## 📋 Diagrama de classes v1
+
+![Image](https://github.com/user-attachments/assets/05b57d59-9e25-400a-b2ea-236975fe461f)
+
+Essa primeira versão contem apenas o esboço inicial do projeto.
+
+## 📋 Diagrama de classes v2 
+
 ![Image](https://github.com/user-attachments/assets/86445c92-f54e-4c28-bd77-b61fd095dec5)
 
-## 📋 Diagrama de classes atualizado
+Essa segunda versão acabamos exagerando um pouco e criamos de maneira que não ficou bom de visualizar, por este motivo dá para notar bastante mudanças nos diagramas mais novos comparados a este.
+
+## 📋 Diagrama de classes v3 simplificando
+
+![Image](https://github.com/user-attachments/assets/ad9b329d-6a03-48a1-aed2-d1bab6f85332)
+
+Nesta versão do diagrama realizamos a simplificação do diagrama anterior juntamente com a adição do design pattern FacadeSingletonController que será responsável por uma interface única para todos os controllers.
+
+## 📋 Diagrama de classes v4 com DAO
 
 ![image](https://github.com/user-attachments/assets/af2625d6-da35-4740-909a-825ae911c19c)
+
+Na versão 4 trocamos a utilização do JPA para fazer a persistência no banco pelo padrão DAO, e também mapeamos os design patterns que estão sendo utilizados no diagrama.
+
+## 📋 Diagrama de classes v5 com Adapter
+![Image](https://github.com/user-attachments/assets/68d80fab-157a-4893-85ea-2959ea46c6d0)
+
+Por fim, na versão 5 adicionamos o design pattern Adapter para a comunicação externa da nossa aplicação com o Google Maps.
 
 ## 🏗️ Melhorias Futuras
 
