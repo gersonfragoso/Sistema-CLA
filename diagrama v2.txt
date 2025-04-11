@@ -1,0 +1,204 @@
+@startuml
+skinparam dpi 150
+scale max 2000x2000
+
+package "domain.model" {
+  entity "Usuario" {
+    - id : Long <<PK>>
+    - nome : String
+    - sobrenome : String
+    - cpf : String
+    - email : String
+    - senha : String
+    - dataNascimento : LocalDate
+    - tipoUsuario : TipoUsuario
+    - bloqueado : boolean
+  }
+
+  entity "Endereco" {
+    - id : Long <<PK>>
+    - rua : String
+    - cidade : String
+    - estado : String
+    - cep : String
+    - numeroCasa : int
+  }
+
+  entity "Telefone" {
+    - id : Long <<PK>>
+    - ddd : int
+    - numeroTelefone : String
+  }
+
+  entity "Local" {
+    - id : Long <<PK>>
+    - nome : String
+    - endereco : String
+    - tipoLocal : String
+    - statusAcessibilidade : StatusAcessibilidade
+  }
+
+  entity "Avaliacao" {
+    - id : Long <<PK>>
+    - nota : int
+    - comentario : String
+    - dataAvaliacao : LocalDate
+  }
+
+  enum "TipoUsuario" {
+    AVALIADOR
+    VISITANTE
+    MODERADOR
+  }
+
+  enum "StatusAcessibilidade" {
+    ACESSIVEL
+    PARCIALMENTE_ACESSIVEL
+    INACESSIVEL
+  }
+
+  Usuario ||--o{ Avaliacao
+  Local ||--o{ Avaliacao
+  Usuario ||--o| Endereco
+  Usuario ||--o| Telefone
+  Usuario o--> "tipoUsuario" TipoUsuario
+  Local o--> "statusAcessibilidade" StatusAcessibilidade
+}
+
+package "repository" {
+  interface "UsuarioRepository" 
+  interface "LocalRepository"
+  interface "AvaliacaoRepository"
+}
+
+package "application.service" {
+  class "UsuarioService" {
+    - usuarioRepository : UsuarioRepository
+    + listarUsuarios()
+    + buscarUsuarioPorId(id : Long)
+    + criarUsuario(request : UsuarioRequest)
+  }
+
+  class "LocalService" {
+    - localRepository : LocalRepository
+    + listarLocais()
+    + criarLocal(request : LocalRequest)
+  }
+
+  class "AvaliacaoService" {
+    - avaliacaoRepository : AvaliacaoRepository
+    - usuarioRepository : UsuarioRepository
+    - localRepository : LocalRepository
+    + criarAvaliacao(request : AvaliacaoRequest)
+  }
+}
+
+package "presentation.controller" {
+  class "UsuarioController" {
+    - usuarioService : UsuarioService
+    + listarUsuarios()
+    + criarUsuario(request : UsuarioRequest)
+  }
+
+  class "LocalController" {
+    - localService : LocalService
+    + listarLocais()
+    + criarLocal(request : LocalRequest)
+  }
+
+  class "AvaliacaoController" {
+    - avaliacaoService : AvaliacaoService
+    + criarAvaliacao(request : AvaliacaoRequest)
+  }
+}
+
+package "infrastructure.exceptions" {
+  class "UsuarioNotFoundException"
+  class "LocalNotFoundException"
+  class "InvalidStatusAcessibilidadeException"
+  UsuarioNotFoundException -|> RuntimeException
+  LocalNotFoundException -|> RuntimeException
+  InvalidStatusAcessibilidadeException -|> RuntimeException
+}
+
+package "presentation.dto" {
+  class "UsuarioRequest" {
+    + nome : String
+    + sobrenome : String
+    + email : String
+    + cpf : String
+    + senha : String
+    + dataNascimento : LocalDate
+  }
+
+  class "LocalRequest" {
+    + nome : String
+    + endereco : String
+    + tipoLocal : String
+    + statusAcessibilidade : StatusAcessibilidade
+  }
+
+  class "AvaliacaoRequest" {
+    + usuarioId : Long
+    + localId : Long
+    + nota : int
+    + comentario : String
+  }
+
+  class "UsuarioResponse" {
+    + id : Long
+    + nome : String
+    + sobrenome : String
+    + email : String
+    + cpf : String
+  }
+
+  class "LocalResponse" {
+    + nome : String
+    + endereco : String
+    + tipoLocal : String
+    + statusAcessibilidade : String
+  }
+
+  class "AvaliacaoResponse" {
+    + id : Long
+    + usuarioId : Long
+    + localId : Long
+    + nota : int
+    + comentario : String
+  }
+}
+
+' Relações
+UsuarioRepository --> "persists" Usuario
+LocalRepository --> "persists" Local
+AvaliacaoRepository --> "persists" Avaliacao
+
+UsuarioService --> "uses" UsuarioRepository
+LocalService --> "uses" LocalRepository
+AvaliacaoService --> "uses" AvaliacaoRepository
+AvaliacaoService --> "uses" UsuarioRepository
+AvaliacaoService --> "uses" LocalRepository
+
+UsuarioService --> "consumes" UsuarioRequest
+UsuarioService --> "produces" UsuarioResponse
+LocalService --> "consumes" LocalRequest
+LocalService --> "produces" LocalResponse
+AvaliacaoService --> "consumes" AvaliacaoRequest
+AvaliacaoService --> "produces" AvaliacaoResponse
+
+UsuarioService --> "throws" UsuarioNotFoundException
+AvaliacaoService --> "throws" UsuarioNotFoundException
+AvaliacaoService --> "throws" LocalNotFoundException
+LocalService --> "throws" InvalidStatusAcessibilidadeException
+
+UsuarioController --> "uses" UsuarioService
+UsuarioController --> "consumes" UsuarioRequest
+UsuarioController --> "produces" UsuarioResponse
+LocalController --> "uses" LocalService
+LocalController --> "consumes" LocalRequest
+LocalController --> "produces" LocalResponse
+AvaliacaoController --> "uses" AvaliacaoService
+AvaliacaoController --> "consumes" AvaliacaoRequest
+AvaliacaoController --> "produces" AvaliacaoResponse
+@enduml
