@@ -133,7 +133,7 @@ O **Sistema CLA** é uma plataforma colaborativa que permite que usuários cadas
 
 ## 📋 Diagrama de classes atualizado
 
-![Image](https://github.com/user-attachments/assets/53b85e39-2b70-42b1-bb8b-32d81c84fee8)
+![image](https://github.com/user-attachments/assets/af2625d6-da35-4740-909a-825ae911c19c)
 
 ## 🏗️ Melhorias Futuras
 
