@@ -2,7 +2,9 @@ package com.example.sistema_cla.infrastructure.dao.impl;
 
 import com.example.sistema_cla.domain.model.Usuario;
 import com.example.sistema_cla.infrastructure.dao.interfaces.UsuarioDAO;
+import com.example.sistema_cla.infrastructure.exceptions.ConnectionException;
 import jakarta.persistence.NoResultException;
+import jakarta.persistence.PersistenceException;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -24,6 +26,8 @@ public class JpaUsuarioDAO extends JpaGenericDAO<Usuario, Long> implements Usuar
             return Optional.of(usuario);
         } catch (NoResultException e) {
             return Optional.empty();
+        } catch (PersistenceException e) {
+            throw new ConnectionException("Erro de conexão ao buscar usuário por email: " + email, e);
         }
     }
 
@@ -37,6 +41,8 @@ public class JpaUsuarioDAO extends JpaGenericDAO<Usuario, Long> implements Usuar
             return Optional.of(usuario);
         } catch (NoResultException e) {
             return Optional.empty();
+        } catch (PersistenceException e) {
+            throw new ConnectionException("Erro de conexão ao buscar usuário por CPF: " + cpf, e);
         }
     }
 }

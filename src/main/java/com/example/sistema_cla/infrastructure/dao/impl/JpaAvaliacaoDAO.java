@@ -3,6 +3,8 @@ package com.example.sistema_cla.infrastructure.dao.impl;
 import com.example.sistema_cla.domain.model.Avaliacao;
 import com.example.sistema_cla.domain.model.Local;
 import com.example.sistema_cla.infrastructure.dao.interfaces.AvaliacaoDAO;
+import com.example.sistema_cla.infrastructure.exceptions.ConnectionException;
+import jakarta.persistence.PersistenceException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,25 +18,37 @@ public class JpaAvaliacaoDAO extends JpaGenericDAO<Avaliacao, Long> implements A
 
     @Override
     public List<Avaliacao> findByUsuarioId(Long usuarioId) {
-        return entityManager
-                .createQuery("SELECT a FROM Avaliacao a WHERE a.usuario.id = :usuarioId", Avaliacao.class)
-                .setParameter("usuarioId", usuarioId)
-                .getResultList();
+        try {
+            return entityManager
+                    .createQuery("SELECT a FROM Avaliacao a WHERE a.usuario.id = :usuarioId", Avaliacao.class)
+                    .setParameter("usuarioId", usuarioId)
+                    .getResultList();
+        } catch (PersistenceException e) {
+            throw new ConnectionException("Erro de conexão ao buscar avaliações por usuário ID: " + usuarioId, e);
+        }
     }
 
     @Override
     public List<Avaliacao> findByLocalId(Long localId) {
-        return entityManager
-                .createQuery("SELECT a FROM Avaliacao a WHERE a.localAcessivel.id = :localId", Avaliacao.class)
-                .setParameter("localId", localId)
-                .getResultList();
+        try {
+            return entityManager
+                    .createQuery("SELECT a FROM Avaliacao a WHERE a.localAcessivel.id = :localId", Avaliacao.class)
+                    .setParameter("localId", localId)
+                    .getResultList();
+        } catch (PersistenceException e) {
+            throw new ConnectionException("Erro de conexão ao buscar avaliações por local ID: " + localId, e);
+        }
     }
 
     @Override
     public List<Avaliacao> findByLocalAcessivel(Local local) {
-        return entityManager
-                .createQuery("SELECT a FROM Avaliacao a WHERE a.localAcessivel = :local", Avaliacao.class)
-                .setParameter("local", local)
-                .getResultList();
+        try {
+            return entityManager
+                    .createQuery("SELECT a FROM Avaliacao a WHERE a.localAcessivel = :local", Avaliacao.class)
+                    .setParameter("local", local)
+                    .getResultList();
+        } catch (PersistenceException e) {
+            throw new ConnectionException("Erro de conexão ao buscar avaliações por objeto local", e);
+        }
     }
 }

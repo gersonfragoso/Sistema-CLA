@@ -6,7 +6,7 @@ import com.example.sistema_cla.domain.model.Usuario;
 import com.example.sistema_cla.infrastructure.dao.interfaces.AvaliacaoDAO;
 import com.example.sistema_cla.infrastructure.dao.interfaces.LocalDAO;
 import com.example.sistema_cla.infrastructure.dao.interfaces.UsuarioDAO;
-import com.example.sistema_cla.infrastructure.exceptions.EntidadeNaoEncontradaException;
+import com.example.sistema_cla.infrastructure.exceptions.EntityNotFoundException;
 import com.example.sistema_cla.infrastructure.utils.AvaliacaoMapper;
 import com.example.sistema_cla.presentation.dto.response.AvaliacaoResponse;
 import com.example.sistema_cla.presentation.dto.response.LocalComAvaliacoesResponse;
@@ -30,12 +30,12 @@ public class BuscarEntidadeService {
 
     public Usuario buscarUsuario(Long id) {
         return usuarioDAO.findById(id)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário", id));
+                .orElseThrow(() -> new EntityNotFoundException("Usuário", id));
     }
 
     public Local buscarLocal(Long id) {
         return localDAO.findById(id)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("Local", id));
+                .orElseThrow(() -> new EntityNotFoundException("Local", id));
     }
     public LocalComAvaliacoesResponse buscarLocalComAvaliacoes(Long id) {
         Local local = buscarLocal(id);
