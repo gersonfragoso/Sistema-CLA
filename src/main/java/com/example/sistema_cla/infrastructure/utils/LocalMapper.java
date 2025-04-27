@@ -7,6 +7,7 @@ import com.example.sistema_cla.presentation.dto.response.LocalResponse;
 public class LocalMapper {
     public static LocalResponse toResponse(Local local) {
         return new LocalResponse(
+                local.getId(),
                 local.getNome(),
                 local.getEndereco(),
                 local.getTipoLocal(),
