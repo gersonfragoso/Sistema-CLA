@@ -7,6 +7,7 @@ import com.example.sistema_cla.presentation.dto.request.AvaliacaoRequest;
 import com.example.sistema_cla.presentation.dto.request.LocalRequest;
 import com.example.sistema_cla.presentation.dto.request.UsuarioRequest;
 import com.example.sistema_cla.presentation.dto.response.AvaliacaoResponse;
+import com.example.sistema_cla.presentation.dto.response.LocalComAvaliacoesResponse;
 import com.example.sistema_cla.presentation.dto.response.LocalResponse;
 import com.example.sistema_cla.presentation.dto.response.UsuarioResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,5 +81,9 @@ public class APIFacade {
     // Métodos de Avaliação
     public AvaliacaoResponse criarAvaliacao(AvaliacaoRequest request) {
         return avaliacaoService.criarAvaliacao(request);
+    }
+
+    public LocalComAvaliacoesResponse buscarLocalDetalhado(Long id){
+        return localService.buscarLocalDetalhado(id);
     }
 }

@@ -9,6 +9,17 @@ import com.example.sistema_cla.presentation.dto.response.AvaliacaoResponse;
 import java.time.LocalDate;
 
 public class AvaliacaoMapper {
+    public static Avaliacao toEntity(AvaliacaoRequest request, Usuario usuario, Local local) {
+        return new Avaliacao(
+                null,
+                usuario,
+                local,
+                request.nota(),
+                request.comentario(),
+                LocalDate.now()
+        );
+    }
+
     public static AvaliacaoResponse toResponse(Avaliacao avaliacao) {
         return new AvaliacaoResponse(
                 avaliacao.getId(),
@@ -17,9 +28,5 @@ public class AvaliacaoMapper {
                 avaliacao.getNota(),
                 avaliacao.getComentario()
         );
-    }
-
-    public static Avaliacao toEntity(AvaliacaoRequest request, Usuario usuario, Local local) {
-        return new Avaliacao(null, usuario, local, request.nota(), request.comentario(), LocalDate.now());
     }
 }

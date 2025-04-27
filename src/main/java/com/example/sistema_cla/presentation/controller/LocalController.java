@@ -2,6 +2,7 @@ package com.example.sistema_cla.presentation.controller;
 
 
 import com.example.sistema_cla.presentation.dto.request.LocalRequest;
+import com.example.sistema_cla.presentation.dto.response.LocalComAvaliacoesResponse;
 import com.example.sistema_cla.presentation.dto.response.LocalResponse;
 import com.example.sistema_cla.presentation.facade.APIFacade;
 import io.swagger.v3.oas.annotations.Operation;
@@ -46,5 +47,9 @@ public class LocalController {
     @PostMapping
     public ResponseEntity<LocalResponse> criarLocal(@RequestBody LocalRequest request) {
         return ResponseEntity.ok(APIFacade.getInstance().criarLocal(request));
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<LocalComAvaliacoesResponse> buscarLocalDetalhado(@PathVariable Long id) {
+        return ResponseEntity.ok(APIFacade.getInstance().buscarLocalDetalhado(id));
     }
 }

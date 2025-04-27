@@ -1,6 +1,7 @@
 package com.example.sistema_cla.infrastructure.dao.impl;
 
 import com.example.sistema_cla.domain.model.Avaliacao;
+import com.example.sistema_cla.domain.model.Local;
 import com.example.sistema_cla.infrastructure.dao.interfaces.AvaliacaoDAO;
 import org.springframework.stereotype.Repository;
 
@@ -26,6 +27,14 @@ public class JpaAvaliacaoDAO extends JpaGenericDAO<Avaliacao, Long> implements A
         return entityManager
                 .createQuery("SELECT a FROM Avaliacao a WHERE a.localAcessivel.id = :localId", Avaliacao.class)
                 .setParameter("localId", localId)
+                .getResultList();
+    }
+
+    @Override
+    public List<Avaliacao> findByLocalAcessivel(Local local) {
+        return entityManager
+                .createQuery("SELECT a FROM Avaliacao a WHERE a.localAcessivel = :local", Avaliacao.class)
+                .setParameter("local", local)
                 .getResultList();
     }
 }
