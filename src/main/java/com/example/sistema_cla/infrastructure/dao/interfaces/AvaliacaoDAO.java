@@ -9,5 +9,4 @@ public interface AvaliacaoDAO extends GenericDAO<Avaliacao, Long> {
     List<Avaliacao> findByUsuarioId(Long usuarioId);
     List<Avaliacao> findByLocalId(Long localId);
     List<Avaliacao> findByLocalAcessivel(Local local);
-
 }

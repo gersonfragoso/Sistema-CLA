@@ -3,6 +3,7 @@ package com.example.sistema_cla.infrastructure.dao.interfaces;
 import java.util.List;
 import java.util.Optional;
 
+
 public interface GenericDAO<T, ID> {
     T save(T entity);
     Optional<T> findById(ID id);

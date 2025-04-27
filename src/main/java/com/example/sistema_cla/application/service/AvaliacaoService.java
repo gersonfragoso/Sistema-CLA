@@ -10,6 +10,7 @@ import com.example.sistema_cla.domain.model.Local;
 import com.example.sistema_cla.domain.model.Usuario;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +31,6 @@ public class AvaliacaoService {
 
         Avaliacao avaliacao = AvaliacaoMapper.toEntity(request, usuario, local);
         Avaliacao salvo = avaliacaoDAO.save(avaliacao);
-
         return AvaliacaoMapper.toResponse(salvo);
     }
 
