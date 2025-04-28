@@ -1,0 +1,46 @@
+curl -X POST "http://localhost:8080/usuarios" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "nome": "João",
+           "sobrenome": "Silva",
+           "cpf": "123.456.789-00",
+           "email": "exemplo@gmail.com",
+           "senha": "abc12345",
+           "dataNascimento": "1990-05-15",
+           "endereco": {
+             "rua": "Rua das Flores",
+             "numeroCasa": "123",
+             "cidade": "São Paulo",
+             "estado": "SP",
+             "cep": "01000-000"
+           },
+           "telefone": {
+             "ddd": "11",
+             "numeroTelefone": "987654321"
+           },
+           "bloqueado": false
+         }'
+
+curl -X POST "http://localhost:8080/api/usuarios" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "nome": "Pedro",
+           "sobrenome": "Silva",
+           "email": "pedro@exemplo.com",
+           "cpf": "123.456.789-01",
+           "dataNascimento": "1990-05-15",
+           "senha": "senha123",
+           "endereco": {
+             "rua": "Rua das Flores",
+             "numeroCasa": "123",
+             "cidade": "São Paulo",
+             "estado": "SP",
+             "cep": "01000-000"
+           },
+           "telefone": {
+             "ddd": "11",
+             "numeroTelefone": "987654321"
+           },
+           "bloqueado": false
+         }'
+         
