@@ -6,26 +6,26 @@ services:
     container_name: sistema-CLA
     ports:
       - "8080:8080"
-    # depends_on:
-    #   - db
-    # environment:
-    #   - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/meubanco
-    #   - SPRING_DATASOURCE_USERNAME=meuusuario
-    #   - SPRING_DATASOURCE_PASSWORD=senhasegura
-    #   - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/sistema_cla
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=gerson1550
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
 
-#   db:
-#     image: postgres:alpine
-#     container_name: meu_db
-#     restart: always
-#     ports:
-#       - "5432:5432"
-#     environment:
-#       - POSTGRES_DB=meubanco
-#       - POSTGRES_USER=meuusuario
-#       - POSTGRES_PASSWORD=senhasegura
-#     volumes:
-#       - db-data:/var/lib/postgresql/data
+  db:
+    image: postgres:alpine
+    # container_name: meu_db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=CLA_DB
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=gerson1550
+    volumes:
+      - db-data:/var/lib/postgresql/data
 
-# volumes:
-#   db-data:
+volumes:
+  db-data:
