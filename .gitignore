@@ -1,6 +1,5 @@
 HELP.md
 target/
-!.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
@@ -31,3 +30,35 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Arquivos de configuração ###
+*.properties
+*.yml
+*.yaml
+*.env
+*.config
+application*.properties
+application*.yml
+
+### Logs ###
+logs/
+*.log
+
+### Dependências ###
+/.mvn/
+mvnw
+mvnw.cmd
+/gradle/
+/node_modules/
+
+### Builds ###
+target/
+out/
+
+### Caches Temporários ###
+.cache/
+.temp/
+
+### Outros arquivos ###
+.DS_Store
+Thumbs.db

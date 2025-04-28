@@ -1,96 +1,42 @@
 package com.example.sistema_cla.domain.model;
 
+import com.example.sistema_cla.domain.enums.TipoUsuario;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.List;
 
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Usuario {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String nome;
     private String sobrenome;
     private String cpf;
+    private String email;
+    private String senha;
     private LocalDate dataNascimento;
+
+    @Enumerated(EnumType.STRING)
+    private TipoUsuario tipoUsuario;
+
+    @OneToOne(cascade = CascadeType.ALL)
     private Endereco endereco;
+
+    @OneToOne(cascade = CascadeType.ALL)
     private Telefone telefone;
+
     private boolean bloqueado;
 
-    public Usuario() {
-
-    }
-
-    public Usuario(Long id, String nome, String sobrenome, String cpf, LocalDate dataNascimento, Endereco endereco, Telefone telefone, boolean bloqueado) {
-        this.id = id;
-        this.nome = nome;
-        this.sobrenome = sobrenome;
-        this.cpf = cpf;
-        this.dataNascimento = dataNascimento;
-        this.endereco = endereco;
-        this.telefone = telefone;
-        this.bloqueado = bloqueado;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getSobrenome() {
-        return sobrenome;
-    }
-
-    public void setSobrenome(String sobrenome) {
-        this.sobrenome = sobrenome;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public LocalDate getDataNascimento() {
-        return dataNascimento;
-    }
-
-    public void setDataNascimento(LocalDate dataNascimento) {
-        this.dataNascimento = dataNascimento;
-    }
-
-    public Endereco getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
-    }
-
-    public Telefone getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(Telefone telefone) {
-        this.telefone = telefone;
-    }
-
-    public boolean isBloqueado() {
-        return bloqueado;
-    }
-
-    public void setBloqueado(boolean bloqueado) {
-        this.bloqueado = bloqueado;
-    }
-    // Getters e Setters
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<Avaliacao> avaliacoes;
 }
+
