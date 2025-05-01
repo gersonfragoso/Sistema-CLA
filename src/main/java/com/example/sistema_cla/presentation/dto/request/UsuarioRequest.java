@@ -4,27 +4,32 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-
 import java.time.LocalDate;
 
 public record UsuarioRequest(
-        @NotBlank(message = "O nome é obrigatório")
+        @NotBlank(message = "Nome é obrigatório")
         String nome,
 
-        @NotBlank(message = "O sobrenome é obrigatório")
+        @NotBlank(message = "Sobrenome é obrigatório")
         String sobrenome,
 
-        @NotBlank(message = "O email é obrigatório")
-        @Email(message = "Formato de email inválido")
-        String email,
-
-        @NotBlank(message = "O CPF é obrigatório")
-        @Pattern(regexp = "\\d{11}", message = "O CPF deve conter 11 dígitos numéricos")
+        @NotBlank(message = "CPF é obrigatório")
+        @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}|\\d{11}", message = "CPF deve estar no formato 999.999.999-99 ou 99999999999")
         String cpf,
 
-        @NotBlank(message = "A senha é obrigatória")
-        @Size(min = 6, message = "A senha deve ter pelo menos 6 caracteres")
+        @NotBlank(message = "Email é obrigatório")
+        @Email(message = "Email deve ser válido")
+        String email,
+
+        @NotBlank(message = "Senha é obrigatória")
+        @Size(min = 6, message = "Senha deve ter pelo menos 6 caracteres")
         String senha,
 
-        LocalDate dataNascimento
+        LocalDate dataNascimento,
+
+        String tipoUsuario,
+
+        EnderecoRequest endereco,
+
+        TelefoneRequest telefone
 ) {}

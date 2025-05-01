@@ -1,5 +1,6 @@
 package com.example.sistema_cla.infrastructure.dao.impl;
 
+import com.example.sistema_cla.domain.enums.TipoUsuario;
 import com.example.sistema_cla.domain.model.Usuario;
 import com.example.sistema_cla.infrastructure.banco.DatabaseConnection;
 import com.example.sistema_cla.infrastructure.dao.interfaces.UsuarioDAO;
@@ -47,7 +48,7 @@ public class JdbcUsuarioDAO extends JdbcGenericDAO<Usuario, Long> implements Usu
         // Converter String para enum
         String tipoUsuarioStr = rs.getString("tipo_usuario");
         if (tipoUsuarioStr != null) {
-            usuario.setTipoUsuario(com.example.sistema_cla.domain.enums.TipoUsuario.valueOf(tipoUsuarioStr));
+            usuario.setTipoUsuario(TipoUsuario.valueOf(tipoUsuarioStr));
         }
 
         usuario.setBloqueado(rs.getBoolean("bloqueado"));
