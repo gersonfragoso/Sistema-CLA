@@ -2,13 +2,16 @@ package com.example.sistema_cla.presentation.facade;
 
 import com.example.sistema_cla.application.service.AvaliacaoService;
 import com.example.sistema_cla.application.service.LocalService;
+import com.example.sistema_cla.application.service.RelatorioService;
 import com.example.sistema_cla.application.service.UsuarioService;
 import com.example.sistema_cla.presentation.dto.request.AvaliacaoRequest;
 import com.example.sistema_cla.presentation.dto.request.LocalRequest;
+import com.example.sistema_cla.presentation.dto.request.RelatorioEstatisticaRequest;
 import com.example.sistema_cla.presentation.dto.request.UsuarioRequest;
 import com.example.sistema_cla.presentation.dto.response.AvaliacaoResponse;
 import com.example.sistema_cla.presentation.dto.response.LocalComAvaliacoesResponse;
 import com.example.sistema_cla.presentation.dto.response.LocalResponse;
+import com.example.sistema_cla.presentation.dto.response.RelatorioResponse;
 import com.example.sistema_cla.presentation.dto.response.UsuarioResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,6 +33,7 @@ public class APIFacade {
     private UsuarioService usuarioService;
     private LocalService localService;
     private AvaliacaoService avaliacaoService;
+    private RelatorioService relatorioService;
 
     // Construtor privado para evitar instanciação externa
     private APIFacade() {
@@ -42,10 +46,12 @@ public class APIFacade {
     @Autowired
     private void init(UsuarioService usuarioService,
                       LocalService localService,
-                      AvaliacaoService avaliacaoService) {
+                      AvaliacaoService avaliacaoService,
+                      RelatorioService relatorioService) {
         this.usuarioService = usuarioService;
         this.localService = localService;
         this.avaliacaoService = avaliacaoService;
+        this.relatorioService = relatorioService;
         instance = this;
     }
 
@@ -85,5 +91,42 @@ public class APIFacade {
 
     public LocalComAvaliacoesResponse buscarLocalDetalhado(Long id){
         return localService.buscarLocalDetalhado(id);
+    }
+
+    // Métodos de Relatório
+    public RelatorioResponse gerarRelatorioEstatisticas(RelatorioEstatisticaRequest request) {
+        return relatorioService.gerarRelatorioEstatisticas(request);
+    }
+
+    public RelatorioResponse gerarRelatorioUltimoMes(String titulo, String formato, Long usuarioId) {
+        return relatorioService.gerarRelatorioUltimoMes(titulo, formato, usuarioId);
+    }
+
+    public List<RelatorioResponse> listarRelatorios() {
+        return relatorioService.listarRelatorios();
+    }
+
+    public RelatorioResponse buscarRelatorioPorId(Long id) {
+        return relatorioService.buscarRelatorioPorId(id);
+    }
+
+    public List<RelatorioResponse> buscarRelatoriosPorUsuario(Long usuarioId) {
+        return relatorioService.buscarRelatoriosPorUsuario(usuarioId);
+    }
+
+    public List<RelatorioResponse> buscarRelatoriosPorCategoria(String categoria) {
+        return relatorioService.buscarRelatoriosPorCategoria(categoria);
+    }
+
+    public void excluirRelatorio(Long id) {
+        relatorioService.excluirRelatorio(id);
+    }
+
+    public AvaliacaoResponse editarAvaliacao(Long id, AvaliacaoRequest request) {
+        return avaliacaoService.editarAvaliacao(id, request);
+    }
+
+    public AvaliacaoResponse desfazerAvaliacaoEdicao(Long id) {
+        return avaliacaoService.desfazerEdicao(id);
     }
 }

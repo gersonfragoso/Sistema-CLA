@@ -18,10 +18,38 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/avaliacoes")
 public class AvaliacaoController {
 
-    // Não injetamos dependências via construtor, usamos a fachada singleton
-
     @PostMapping
+    @Operation(summary = "Criar uma avaliação")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Avaliação criada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos"),
+            @ApiResponse(responseCode = "404", description = "Usuário ou local não encontrado")
+    })
     public ResponseEntity<AvaliacaoResponse> criarAvaliacao(@Valid @RequestBody AvaliacaoRequest request) {
         return ResponseEntity.ok(APIFacade.getInstance().criarAvaliacao(request));
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Editar uma avaliação")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Avaliação editada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos"),
+            @ApiResponse(responseCode = "404", description = "Avaliação não encontrada")
+    })
+    public ResponseEntity<AvaliacaoResponse> editarAvaliacao(
+            @PathVariable Long id,
+            @Valid @RequestBody AvaliacaoRequest request) {
+        return ResponseEntity.ok(APIFacade.getInstance().editarAvaliacao(id, request));
+    }
+
+    @PostMapping("/{id}/desfazer")
+    @Operation(summary = "Desfazer a última edição de uma avaliação")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Edição desfeita com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Não há edições para desfazer"),
+            @ApiResponse(responseCode = "404", description = "Avaliação não encontrada")
+    })
+    public ResponseEntity<AvaliacaoResponse> desfazerEdicao(@PathVariable Long id) {
+        return ResponseEntity.ok(APIFacade.getInstance().desfazerAvaliacaoEdicao(id));
     }
 }
