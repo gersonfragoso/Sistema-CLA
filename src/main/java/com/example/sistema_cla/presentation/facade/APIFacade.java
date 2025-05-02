@@ -1,13 +1,10 @@
 package com.example.sistema_cla.presentation.facade;
 
-import com.example.sistema_cla.application.service.AvaliacaoService;
-import com.example.sistema_cla.application.service.LocalService;
-import com.example.sistema_cla.application.service.RelatorioService;
-import com.example.sistema_cla.application.service.UsuarioService;
-import com.example.sistema_cla.presentation.dto.request.AvaliacaoRequest;
-import com.example.sistema_cla.presentation.dto.request.LocalRequest;
-import com.example.sistema_cla.presentation.dto.request.RelatorioEstatisticaRequest;
-import com.example.sistema_cla.presentation.dto.request.UsuarioRequest;
+import com.example.sistema_cla.application.service.*;
+import com.example.sistema_cla.domain.model.EstatisticaAcesso;
+import com.example.sistema_cla.domain.model.RegistroAcesso;
+import com.example.sistema_cla.infrastructure.dao.interfaces.EstatisticaAcessoDAO;
+import com.example.sistema_cla.presentation.dto.request.*;
 import com.example.sistema_cla.presentation.dto.response.AvaliacaoResponse;
 import com.example.sistema_cla.presentation.dto.response.LocalComAvaliacoesResponse;
 import com.example.sistema_cla.presentation.dto.response.LocalResponse;
@@ -17,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Implementação do padrão Facade combinado com Singleton.
@@ -34,6 +32,8 @@ public class APIFacade {
     private LocalService localService;
     private AvaliacaoService avaliacaoService;
     private RelatorioService relatorioService;
+    private RegistroAcessoService registroAcessoService;
+    private EstatisticaAcessoDAO estatisticaAcessoDAO;
 
     // Construtor privado para evitar instanciação externa
     private APIFacade() {
@@ -47,11 +47,15 @@ public class APIFacade {
     private void init(UsuarioService usuarioService,
                       LocalService localService,
                       AvaliacaoService avaliacaoService,
-                      RelatorioService relatorioService) {
+                      RelatorioService relatorioService,
+                      RegistroAcessoService registroAcessoService,
+                      EstatisticaAcessoDAO estatisticaAcessoDAO) {
         this.usuarioService = usuarioService;
         this.localService = localService;
         this.avaliacaoService = avaliacaoService;
         this.relatorioService = relatorioService;
+        this.registroAcessoService = registroAcessoService;
+        this.estatisticaAcessoDAO = estatisticaAcessoDAO;
         instance = this;
     }
 
@@ -128,5 +132,27 @@ public class APIFacade {
 
     public AvaliacaoResponse desfazerAvaliacaoEdicao(Long id) {
         return avaliacaoService.desfazerEdicao(id);
+    }
+
+    public RegistroAcesso registrarAcesso(RegistroAcessoRequest request) {
+        return registroAcessoService.registrarAcesso(
+                request.usuarioId(),
+                request.ipAcesso(),
+                request.dispositivo(),
+                request.tempoSessaoMinutos(),
+                request.paginasVisitadas()
+        );
+    }
+
+    // Métodos de Estatísticas
+    public Optional<EstatisticaAcesso> buscarEstatisticaPorUsuario(Long usuarioId) {
+        return estatisticaAcessoDAO.findByUsuarioId(usuarioId);
+    }
+
+    public List<EstatisticaAcesso> buscarTopUsuariosAtivos(int limit) {
+        return estatisticaAcessoDAO.findTopUsuariosAtivos(limit);
+    }
+    public AvaliacaoResponse buscarAvaliacaoPorId(Long id) {
+        return avaliacaoService.buscarPorId(id);
     }
 }

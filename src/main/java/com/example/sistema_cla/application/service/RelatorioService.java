@@ -1,35 +1,46 @@
 package com.example.sistema_cla.application.service;
 
-import com.example.sistema_cla.application.business.relatorio.RelatorioEstatisticaTemplate;
-import com.example.sistema_cla.application.business.relatorio.RelatorioTemplateFactory;
+import com.example.sistema_cla.domain.model.EstatisticaAcesso;
 import com.example.sistema_cla.domain.model.Relatorio;
 import com.example.sistema_cla.domain.model.Usuario;
+import com.example.sistema_cla.domain.strategy.RelatorioGeracaoStrategy;
+import com.example.sistema_cla.infrastructure.dao.interfaces.RegistroAcessoDAO;
 import com.example.sistema_cla.infrastructure.dao.interfaces.RelatorioDAO;
+import com.example.sistema_cla.infrastructure.dao.interfaces.UsuarioDAO;
+import com.example.sistema_cla.infrastructure.exceptions.EntityNotFoundException;
 import com.example.sistema_cla.infrastructure.exceptions.ValidationException;
 import com.example.sistema_cla.infrastructure.utils.RelatorioMapper;
 import com.example.sistema_cla.presentation.dto.request.RelatorioEstatisticaRequest;
 import com.example.sistema_cla.presentation.dto.response.RelatorioResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 public class RelatorioService {
-
     private final RelatorioDAO relatorioDAO;
-    private final BuscarEntidadeService buscarEntidadeService;
+    private final UsuarioDAO usuarioDAO;
+    private final RegistroAcessoDAO registroAcessoDAO;
+    private final Map<String, RelatorioGeracaoStrategy> estrategias;
 
-    @Autowired
-    public RelatorioService(RelatorioDAO relatorioDAO,
-                            BuscarEntidadeService buscarEntidadeService) {
+    public RelatorioService(
+            RelatorioDAO relatorioDAO,
+            UsuarioDAO usuarioDAO,
+            RegistroAcessoDAO registroAcessoDAO,
+            List<RelatorioGeracaoStrategy> estrategiasList) {
         this.relatorioDAO = relatorioDAO;
-        this.buscarEntidadeService = buscarEntidadeService;
+        this.usuarioDAO = usuarioDAO;
+        this.registroAcessoDAO = registroAcessoDAO;
+
+        // Mapear estratégias por tipo
+        this.estrategias = estrategiasList.stream()
+                .collect(Collectors.toMap(
+                        RelatorioGeracaoStrategy::getTipo,
+                        strategy -> strategy));
     }
 
     /**
@@ -38,32 +49,41 @@ public class RelatorioService {
     public RelatorioResponse gerarRelatorioEstatisticas(RelatorioEstatisticaRequest request) {
         validarCamposEstatistica(request);
 
-        // Buscar usuário solicitante
-        Usuario solicitante = buscarEntidadeService.buscarUsuario(request.usuarioId());
+        Usuario usuario = usuarioDAO.findById(request.usuarioId())
+                .orElseThrow(() -> new EntityNotFoundException("Usuário", request.usuarioId()));
 
-        // Obter dados para o relatório
-        Map<String, Object> estatisticas = coletarEstatisticasAcesso(
-                request.dataInicio(),
-                request.dataFim());
+        // Converter para entity
+        Relatorio relatorio = RelatorioMapper.toEntityFromEstatisticaRequest(request, usuario);
 
-        // Criar template apropriado usando a Factory
-        RelatorioEstatisticaTemplate template = RelatorioTemplateFactory.criarTemplate(request.formato());
+        // Buscar dados para o relatório
+        List<EstatisticaAcesso> estatisticas = registroAcessoDAO.getEstatisticasAcessoPorPeriodo(
+                request.dataInicio(), request.dataFim());
 
-        // Gerar o relatório usando o template
-        Relatorio relatorio = template.gerarRelatorio(
+        Map<String, Object> resumoGeral = registroAcessoDAO.getResumoGeralAcessos(
+                request.dataInicio(), request.dataFim());
+
+        // Selecionar estratégia com base no formato
+        RelatorioGeracaoStrategy estrategia = estrategias.get(request.formato().toUpperCase());
+        if (estrategia == null) {
+            estrategia = estrategias.get("HTML"); // Default
+        }
+
+        // Gerar conteúdo usando a estratégia
+        String conteudo = estrategia.gerarConteudo(
                 request.titulo(),
+                request.dataInicio(),
+                request.dataFim(),
                 estatisticas,
-                solicitante);
+                resumoGeral);
 
-        // Adicionar metadados específicos ao relatório
+        relatorio.setConteudo(conteudo);
         relatorio.setCategoria("ESTATISTICA_ACESSO");
         relatorio.setPeriodoInicio(request.dataInicio());
         relatorio.setPeriodoFim(request.dataFim());
 
-        // Persistir o relatório
+        // Salvar relatório
         Relatorio salvo = relatorioDAO.save(relatorio);
 
-        // Converter para DTO de resposta
         return RelatorioMapper.toResponse(salvo);
     }
 
@@ -132,50 +152,6 @@ public class RelatorioService {
     }
 
     /**
-     * Coletar estatísticas de acesso para o período especificado
-     * (método mockado para demonstração)
-     */
-    private Map<String, Object> coletarEstatisticasAcesso(LocalDate dataInicio, LocalDate dataFim) {
-        Map<String, Object> estatisticas = new HashMap<>();
-
-        // Dados do período
-        estatisticas.put("dataInicio", dataInicio);
-        estatisticas.put("dataFim", dataFim);
-
-        // Dados gerais (mock)
-        estatisticas.put("totalAcessos", 1250);
-        estatisticas.put("usuariosAtivos", 45);
-        estatisticas.put("mediaAcessosPorUsuario", 27.8);
-        estatisticas.put("tempoMedioSessaoMinutos", 32L);
-
-        // Dados detalhados por usuário (mock)
-        List<Map<String, Object>> estatisticasPorUsuario = new ArrayList<>();
-
-        Map<String, Object> usuario1 = new HashMap<>();
-        usuario1.put("usuarioId", 1L);
-        usuario1.put("nomeUsuario", "João Silva");
-        usuario1.put("quantidadeAcessos", 45);
-        usuario1.put("ultimoAcesso", LocalDate.now().atTime(10, 30));
-        usuario1.put("tempoTotalMinutos", 120L);
-        usuario1.put("paginasVisitadas", 78);
-
-        Map<String, Object> usuario2 = new HashMap<>();
-        usuario2.put("usuarioId", 2L);
-        usuario2.put("nomeUsuario", "Maria Oliveira");
-        usuario2.put("quantidadeAcessos", 32);
-        usuario2.put("ultimoAcesso", LocalDate.now().minusDays(1).atTime(15, 45));
-        usuario2.put("tempoTotalMinutos", 95L);
-        usuario2.put("paginasVisitadas", 53);
-
-        estatisticasPorUsuario.add(usuario1);
-        estatisticasPorUsuario.add(usuario2);
-
-        estatisticas.put("estatisticasPorUsuario", estatisticasPorUsuario);
-
-        return estatisticas;
-    }
-
-    /**
      * Validar campos do request
      */
     private void validarCamposEstatistica(RelatorioEstatisticaRequest request) {
@@ -188,7 +164,7 @@ public class RelatorioService {
         if (request.formato() == null || request.formato().trim().isEmpty()) {
             erros.add("O formato do relatório é obrigatório");
         } else if (!isFormatoValido(request.formato())) {
-            erros.add("Formato de relatório inválido. Formatos suportados: HTML, PDF");
+            erros.add("Formato de relatório inválido. Formatos suportados: HTML, TEXT");
         }
 
         if (request.dataInicio() == null) {
@@ -214,6 +190,7 @@ public class RelatorioService {
     }
 
     private boolean isFormatoValido(String formato) {
-        return "HTML".equalsIgnoreCase(formato) || "PDF".equalsIgnoreCase(formato);
+        // Verificar se o formato está entre os disponíveis nas estratégias
+        return estrategias.containsKey(formato.toUpperCase());
     }
 }

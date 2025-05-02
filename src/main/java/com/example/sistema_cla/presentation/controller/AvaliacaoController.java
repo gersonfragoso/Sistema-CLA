@@ -52,4 +52,13 @@ public class AvaliacaoController {
     public ResponseEntity<AvaliacaoResponse> desfazerEdicao(@PathVariable Long id) {
         return ResponseEntity.ok(APIFacade.getInstance().desfazerAvaliacaoEdicao(id));
     }
+    @GetMapping("/{id}")
+    @Operation(summary = "Buscar avaliação por ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Avaliação encontrada"),
+            @ApiResponse(responseCode = "404", description = "Avaliação não encontrada")
+    })
+    public ResponseEntity<AvaliacaoResponse> buscarAvaliacaoPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(APIFacade.getInstance().buscarAvaliacaoPorId(id));
+    }
 }
