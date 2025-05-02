@@ -158,6 +158,10 @@ Na versão 4 trocamos a utilização do JPA para fazer a persistência no banco 
 
 Por fim, na versão 5 adicionamos o design pattern Adapter para a comunicação externa da nossa aplicação com o Google Maps.
 
+## 📋 Diagrama de classes v6
+![Image](https://github.com/user-attachments/assets/8b8a7a25-b438-4c5e-ad1c-df09d2485d4a)
+
+Por fim, na versão 6 adicionamos os demais design pattern necessários.
 ## 🏗️ Melhorias Futuras
 
 - 🔐 **Autenticação e Autorização** (Spring Security + JWT)
