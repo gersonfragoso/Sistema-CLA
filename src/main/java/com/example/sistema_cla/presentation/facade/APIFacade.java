@@ -3,6 +3,10 @@ package com.example.sistema_cla.presentation.facade;
 import com.example.sistema_cla.application.service.*;
 import com.example.sistema_cla.domain.model.EstatisticaAcesso;
 import com.example.sistema_cla.domain.model.RegistroAcesso;
+import com.example.sistema_cla.domain.observer.AcessoObserver;
+import com.example.sistema_cla.domain.observer.impl.EstatisticaAcessoObserver;
+import com.example.sistema_cla.domain.observer.impl.LogAcessoObserver;
+import com.example.sistema_cla.domain.observer.impl.SegurancaAcessoObserver;
 import com.example.sistema_cla.infrastructure.dao.interfaces.EstatisticaAcessoDAO;
 import com.example.sistema_cla.presentation.dto.request.*;
 import com.example.sistema_cla.presentation.dto.response.AvaliacaoResponse;
@@ -11,8 +15,10 @@ import com.example.sistema_cla.presentation.dto.response.LocalResponse;
 import com.example.sistema_cla.presentation.dto.response.RelatorioResponse;
 import com.example.sistema_cla.presentation.dto.response.UsuarioResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +41,9 @@ public class APIFacade {
     private RegistroAcessoService registroAcessoService;
     private EstatisticaAcessoDAO estatisticaAcessoDAO;
 
+    // Para acesso aos observers
+    private ApplicationContext applicationContext;
+
     // Construtor privado para evitar instanciação externa
     private APIFacade() {
         // Construtor privado vazio
@@ -49,13 +58,15 @@ public class APIFacade {
                       AvaliacaoService avaliacaoService,
                       RelatorioService relatorioService,
                       RegistroAcessoService registroAcessoService,
-                      EstatisticaAcessoDAO estatisticaAcessoDAO) {
+                      EstatisticaAcessoDAO estatisticaAcessoDAO,
+                      ApplicationContext applicationContext) {
         this.usuarioService = usuarioService;
         this.localService = localService;
         this.avaliacaoService = avaliacaoService;
         this.relatorioService = relatorioService;
         this.registroAcessoService = registroAcessoService;
         this.estatisticaAcessoDAO = estatisticaAcessoDAO;
+        this.applicationContext = applicationContext;
         instance = this;
     }
 
@@ -134,6 +145,7 @@ public class APIFacade {
         return avaliacaoService.desfazerEdicao(id);
     }
 
+    // Métodos de RegistroAcesso
     public RegistroAcesso registrarAcesso(RegistroAcessoRequest request) {
         return registroAcessoService.registrarAcesso(
                 request.usuarioId(),
@@ -144,6 +156,76 @@ public class APIFacade {
         );
     }
 
+    public List<RegistroAcesso> buscarRegistrosPorUsuario(Long usuarioId) {
+        return registroAcessoService.buscarRegistrosPorUsuario(usuarioId);
+    }
+
+    public List<RegistroAcesso> buscarRegistrosPorPeriodo(LocalDateTime inicio, LocalDateTime fim) {
+        return registroAcessoService.buscarRegistrosPorPeriodo(inicio, fim);
+    }
+
+    public List<RegistroAcesso> buscarRegistrosPorUsuarioEPeriodo(
+            Long usuarioId, LocalDateTime inicio, LocalDateTime fim) {
+        return registroAcessoService.buscarRegistrosPorUsuarioEPeriodo(usuarioId, inicio, fim);
+    }
+
+    // Métodos para gerenciar observers (para testes)
+    public boolean adicionarObserver(String tipo) {
+        try {
+            AcessoObserver observer = null;
+
+            switch (tipo.toLowerCase()) {
+                case "estatistica":
+                    observer = applicationContext.getBean(EstatisticaAcessoObserver.class);
+                    break;
+                case "log":
+                    observer = applicationContext.getBean(LogAcessoObserver.class);
+                    break;
+                case "seguranca":
+                    observer = applicationContext.getBean(SegurancaAcessoObserver.class);
+                    break;
+                default:
+                    return false;
+            }
+
+            if (observer != null) {
+                registroAcessoService.registrarObserver(observer);
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean removerObserver(String tipo) {
+        try {
+            AcessoObserver observer = null;
+
+            switch (tipo.toLowerCase()) {
+                case "estatistica":
+                    observer = applicationContext.getBean(EstatisticaAcessoObserver.class);
+                    break;
+                case "log":
+                    observer = applicationContext.getBean(LogAcessoObserver.class);
+                    break;
+                case "seguranca":
+                    observer = applicationContext.getBean(SegurancaAcessoObserver.class);
+                    break;
+                default:
+                    return false;
+            }
+
+            if (observer != null) {
+                registroAcessoService.removerObserver(observer);
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     // Métodos de Estatísticas
     public Optional<EstatisticaAcesso> buscarEstatisticaPorUsuario(Long usuarioId) {
         return estatisticaAcessoDAO.findByUsuarioId(usuarioId);
@@ -152,6 +234,7 @@ public class APIFacade {
     public List<EstatisticaAcesso> buscarTopUsuariosAtivos(int limit) {
         return estatisticaAcessoDAO.findTopUsuariosAtivos(limit);
     }
+
     public AvaliacaoResponse buscarAvaliacaoPorId(Long id) {
         return avaliacaoService.buscarPorId(id);
     }
