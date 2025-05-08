@@ -8,13 +8,24 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Avaliacao {
+public class Avaliacao implements AvaliacaoComponente {
     private Long id;
     private Usuario usuario;
     private Local localAcessivel;
     private int nota; // Escala de 1 a 5
     private String comentario;
     private LocalDate dataAvaliacao;
+
+    // Implementação da interface AvaliacaoComponente
+    @Override
+    public int getNota() {
+        return this.nota;
+    }
+
+    @Override
+    public String getComentario() {
+        return this.comentario;
+    }
 
     /**
      * Cria um memento do estado atual da avaliação
@@ -56,7 +67,6 @@ public class Avaliacao {
      * @param novoComentario Novo comentário
      * @param novaNota Nova nota
      */
-
     public void editar(String novoComentario, int novaNota) {
         this.comentario = novoComentario;
         this.nota = novaNota;

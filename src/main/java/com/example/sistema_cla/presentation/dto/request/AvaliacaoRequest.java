@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.List;
+
 public record AvaliacaoRequest(
         @NotNull(message = "O ID do usuário é obrigatório")
         Long usuarioId,
@@ -17,5 +19,7 @@ public record AvaliacaoRequest(
         int nota,
 
         @Size(max = 500, message = "O comentário deve ter no máximo 500 caracteres")
-        String comentario
+        String comentario,
+
+        List<AvaliacaoRequest> avaliacoes // Novo campo para permitir avaliações compostas
 ) {}
