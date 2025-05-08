@@ -82,6 +82,7 @@ public class AvaliacaoService {
 
         return AvaliacaoMapper.toResponse(avaliacao);
     }
+
     public AvaliacaoResponse buscarPorId(Long id) {
         Avaliacao avaliacao = avaliacaoDAO.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Avaliação", id));
